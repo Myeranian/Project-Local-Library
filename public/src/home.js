@@ -19,12 +19,15 @@ function booksBorrowedCount(books) {
 
 function getMostCommonGenres(books) {
   let finalArray = [];
-  let genreList = [];
-  for (let book of books) {
+  let gList = books.map((book) => book.genre);
+  let genreList = gList.filter((value, index) => {
+    return gList.indexOf(value) === index;
+  })
+    /* for (let book of books) {
     if (!genreList.includes(book.genre)) {
       genreList.push(book.genre);
     }
-  }
+  } */
   for (let genre of genreList) {
     let formattedGenre = {};
     formattedGenre = { "name": genre, "count" : 0};
@@ -46,12 +49,31 @@ function getMostPopularBooks(books) {
   let mostPopular = [];
   books.sort((bookA, bookB) => (bookA.borrows.length > bookB.borrows.length ? 1 : -1));
   let topFive = books.slice(4);
-  for (let book of topFive) {
+
+  const result = topFive.reduce((acc, book) => {
+    acc[topFive.title] = topFive.borrows.length;
+    return acc;
+  });
+
+  //{book1: borrowcount1,
+  //book2: borrowcount2,         <-- return looks like this
+  //book3: borrowcount3,
+  //book4:  borrowcount4
+  //book5: borrowcount4
+  //}
+
+  for (const [key, value] of Object.entries(result)) {
+    let popularBook = {};
+    popularBook = { "name": key, "count": value };
+    mostPopular.push(popularBook);
+  }
+
+  /* for (let book of topFive) {
     let popularBook = {};
     let borrowCount = book.borrows.length;
     popularBook = { "name": book.title, "count" : borrowCount };
     mostPopular.push(popularBook);
-  }
+  } */
   mostPopular.sort((bookA, bookB) => (bookA.count > bookB.count ? -1 : 1));
   return mostPopular;
 }
