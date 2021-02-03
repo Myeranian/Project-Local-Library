@@ -7,6 +7,13 @@ function totalAccountsCount(accounts) {
 }
 
 function booksBorrowedCount(books) {
+  /* for (let book of books) {
+    countArray.push(book.borrows.length);
+  }
+  count = countArray.reduce((acc, borrowcount) => acc + area, accumulator);
+  return count; */
+  
+  
   let count = 0;
   for (let book of books) {
     if (book.borrows[0].returned === false) {
@@ -51,16 +58,9 @@ function getMostPopularBooks(books) {
   let topFive = books.slice(4);
 
   const result = topFive.reduce((acc, book) => {
-    acc[topFive.title] = topFive.borrows.length;
+    acc[book.title] = book.borrows.length;
     return acc;
-  });
-
-  //{book1: borrowcount1,
-  //book2: borrowcount2,         <-- return looks like this
-  //book3: borrowcount3,
-  //book4:  borrowcount4
-  //book5: borrowcount4
-  //}
+  }, {});
 
   for (const [key, value] of Object.entries(result)) {
     let popularBook = {};
@@ -68,12 +68,12 @@ function getMostPopularBooks(books) {
     mostPopular.push(popularBook);
   }
 
-  /* for (let book of topFive) {
+  for (let book of topFive) {
     let popularBook = {};
     let borrowCount = book.borrows.length;
     popularBook = { "name": book.title, "count" : borrowCount };
     mostPopular.push(popularBook);
-  } */
+  }
   mostPopular.sort((bookA, bookB) => (bookA.count > bookB.count ? -1 : 1));
   return mostPopular;
 }
